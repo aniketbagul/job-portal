@@ -1,0 +1,140 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+
+<div class="mb-8">
+    <div class="flex items-center gap-4">
+        <a href="{% url 'manage_applications' %}" class="w-10 h-10 bg-white border border-gray-200 rounded-full flex items-center justify-center text-gray-500 hover:text-primary-600 hover:border-primary-300 transition-colors shadow-sm">
+            <i class="fa fa-arrow-left"></i>
+        </a>
+        <div>
+            <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight flex items-center">
+                AI Resume Analysis
+            </h1>
+            <p class="mt-2 text-sm text-gray-500">Applicant: <span class="font-bold text-gray-900">{{ app.name }}</span> | Job Reference: #{{ job.id }}</p>
+        </div>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    
+    <!-- Left Column: Score & Details -->
+    <div class="space-y-8 lg:col-span-1">
+        
+        <!-- Score Card -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden relative">
+            <div class="absolute top-0 w-full h-2 {% if score >= 80 %}bg-green-500{% elif score >= 50 %}bg-yellow-500{% else %}bg-red-500{% endif %}"></div>
+            <div class="p-8 text-center">
+                <h3 class="text-gray-500 font-semibold mb-6">ATS Match Score</h3>
+                <div class="inline-flex items-center justify-center w-40 h-40 rounded-full border-8 {% if score >= 80 %}border-green-100 text-green-600{% elif score >= 50 %}border-yellow-100 text-yellow-600{% else %}border-red-100 text-red-600{% endif %} relative mb-4">
+                    <span class="text-5xl font-black">{{ score }}<span class="text-2xl text-gray-400">%</span></span>
+                </div>
+                <h4 class="text-2xl font-bold text-gray-900">
+                    {% if score >= 80 %}Excellent Match
+                    {% elif score >= 50 %}Potential Fit
+                    {% else %}Weak Match{% endif %}
+                </h4>
+                <p class="text-sm text-gray-500 mt-2">Calculated against requirements for <strong>{{ job.title }}</strong></p>
+            </div>
+            <div class="bg-gray-50 px-6 py-4 border-t border-gray-100 flex justify-center">
+                <a href="{{ app.resume.url }}" download class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 transition-colors">
+                    <i class="fa fa-file-pdf mr-2 text-red-500"></i> Download Full Resume
+                </a>
+            </div>
+        </div>
+
+        <!-- Contact Box -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <h3 class="font-bold text-gray-900 border-b border-gray-100 pb-3 mb-4">Applicant Profile</h3>
+            <ul class="space-y-4">
+                <li class="flex items-start">
+                    <i class="fa fa-user mt-1 text-gray-400 w-6"></i>
+                    <div>
+                        <p class="text-xs text-gray-500 font-medium">Full Name</p>
+                        <p class="text-sm font-semibold text-gray-900">{{ app.name }}</p>
+                    </div>
+                </li>
+                <li class="flex items-start">
+                    <i class="fa fa-envelope mt-1 text-gray-400 w-6"></i>
+                    <div>
+                        <p class="text-xs text-gray-500 font-medium">Email Address</p>
+                        <a href="mailto:{{ app.email }}" class="text-sm font-semibold text-primary-600 hover:text-primary-800">{{ app.email }}</a>
+                    </div>
+                </li>
+                <li class="flex items-start">
+                    <i class="fa fa-phone mt-1 text-gray-400 w-6"></i>
+                    <div>
+                        <p class="text-xs text-gray-500 font-medium">Phone</p>
+                        <p class="text-sm font-semibold text-gray-900">{{ app.phone }}</p>
+                    </div>
+                </li>
+                 <li class="flex items-start">
+                    <i class="fa fa-calendar mt-1 text-gray-400 w-6"></i>
+                    <div>
+                        <p class="text-xs text-gray-500 font-medium">Applied On</p>
+                        <p class="text-sm font-semibold text-gray-900">{{ app.contact_date|date:"F d, Y" }}</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Right Column: Analysis Detail -->
+    <div class="lg:col-span-2 space-y-8">
+        
+        <!-- Keyword Matching -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+            <h3 class="text-xl font-bold text-gray-900 mb-6 flex items-center">
+                <i class="fa-solid fa-list-check text-primary-500 mr-2"></i> Keyword Breakdown
+            </h3>
+            
+            <div class="mb-8">
+                <h4 class="text-sm font-bold text-gray-700 uppercase tracking-wider mb-4 flex items-center">
+                    <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span> Required Skills Found ({{ matched_keywords|length }})
+                </h4>
+                <div class="flex flex-wrap gap-2">
+                    {% if matched_keywords %}
+                        {% for kw in matched_keywords %}
+                            <span class="inline-flex items-center px-3 py-1 bg-green-50 text-green-700 border border-green-200 rounded-lg text-sm font-semibold">
+                                <i class="fa fa-check text-xs mr-1.5 opacity-70"></i> {{ kw|title }}
+                            </span>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-sm text-gray-500 italic">No exact matching keywords found from the job description.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div>
+                <h4 class="text-sm font-bold text-gray-700 uppercase tracking-wider mb-4 flex items-center">
+                    <span class="w-2 h-2 bg-red-400 rounded-full mr-2"></span> Potential Missing Skills ({{ missing_keywords|length }})
+                </h4>
+                <div class="flex flex-wrap gap-2">
+                    {% if missing_keywords %}
+                        {% for kw in missing_keywords %}
+                            <span class="inline-flex items-center px-3 py-1 bg-red-50 text-red-600 border border-red-100 rounded-lg text-sm font-medium">
+                                <i class="fa fa-times text-xs mr-1.5 opacity-70"></i> {{ kw|title }}
+                            </span>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-sm text-green-600 font-medium"><i class="fa fa-check-circle mr-1"></i> All detected required keywords are present!</p>
+                    {% endif %}
+                </div>
+                <p class="text-xs text-gray-400 mt-4"><i class="fa fa-info-circle mr-1"></i> Note: Missed skills are automatically extracted from the original job description. False positives occasionally occur if standard wording differs.</p>
+            </div>
+        </div>
+
+        <!-- Document Preview -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+            <h3 class="text-xl font-bold text-gray-900 mb-6 flex items-center">
+                <i class="fa-regular fa-file-lines text-primary-500 mr-2"></i> Extracted Resume Text Profile
+            </h3>
+            <div class="bg-gray-50 p-6 rounded-xl border border-gray-200 text-sm text-gray-600 whitespace-pre-wrap font-mono leading-relaxed max-h-[300px] overflow-y-auto">
+{% if resume_preview %}{{ resume_preview }}{% else %}No readable text extracted. This often happens if the PDF is purely composed of images.{% endif %}
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

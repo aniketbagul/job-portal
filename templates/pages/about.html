@@ -1,63 +1,68 @@
 {% extends 'base.html' %}
 {% block title %} About Us {% endblock %}
 {% block content %}
- 
 
-<div class="page-heading about-heading header-text" style="background-image: url(https://images.unsplash.com/photo-1553013746-fd5454da7078?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1050&q=80);">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="text-content">
-            <h4>about us</h4>
-            <h2>our company</h2>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-  <div class="best-features about-features">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="section-heading">
-            <h2>Get to know us a bit more</h2>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="right-image">
-            <img src="https://images.unsplash.com/photo-1557426272-fc759fdf7a8d?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" alt="">
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="left-content">
-            <h4>What do we do?</h4>
-            <p>We are  a global leader in partnering with companies to transform and manage their business by harnessing the power of technology. The Group is guided everyday by its purpose of unleashing human energy through technology for an inclusive and sustainable future. It is a responsible and diverse organization of 270,000 team members in nearly 50 countries. With its strong 50 year heritage and deep industry expertise.<br><br>We are  trusted by its clients to address the entire breadth of their business needs, from strategy and design to operations, fueled by the fast evolving and innovative world of cloud, data, AI, connectivity, software, digital engineering and platforms. The Group reported in 2020 global revenues of €16 billion.</p>
-            <ul class="social-icons">
-              <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-              <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-              <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
+<!-- Hero Banner -->
+<section class="relative bg-primary-900 py-32 overflow-hidden flex items-center justify-center text-center text-white">
+  <div class="absolute inset-0 bg-gradient-to-r from-primary-800 to-primary-600 opacity-90"></div>
+  <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1553013746-fd5454da7078?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80')] bg-cover bg-center mix-blend-overlay border-b border-primary-800"></div>
   
-  <div class="team-members">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12 mt-3">
+  <div class="relative z-10 container mx-auto px-4 mt-8">
+    <h4 class="text-primary-200 text-lg md:text-xl uppercase tracking-widest font-semibold mb-2">About Us</h4>
+    <h2 class="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight">Our Company</h2>
+  </div>
+</section>
 
-          <h5>What we believe in</h5>
-
-          <p>As a leader in digital transformation, we are also a responsible company working to ensure that technology and innovation drive sustainable and social development. We have strengthened this commitment to our employees, clients, partners, communities & planet by leveraging three fundamental pillars: Diversity and Inclusion, Digital Inclusion, and Environmental Sustainability.</p>
+<!-- About Section -->
+<section class="py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight">Get to know us a bit more</h2>
+      <div class="w-24 h-1 bg-primary-500 mx-auto mt-4 rounded-full"></div>
+    </div>
+    
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <div class="relative group">
+        <div class="absolute inset-0 bg-gradient-to-r from-primary-400 to-primary-600 shadow-xl transform -skew-y-3 sm:skew-y-0 sm:-rotate-3 sm:rounded-3xl transition-transform duration-500 group-hover:rotate-0 group-hover:scale-105"></div>
+        <img src="https://images.unsplash.com/photo-1557426272-fc759fdf7a8d?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" alt="About us" class="relative rounded-3xl shadow-lg object-cover h-[500px] w-full transition-transform duration-500 group-hover:scale-[1.02]">
+      </div>
+      
+      <div class="space-y-6">
+        <h4 class="text-2xl font-bold text-gray-900 pb-2 border-b border-gray-100">What do we do?</h4>
+        <p class="text-lg text-gray-600 leading-relaxed text-justify">
+          We are a global leader in partnering with companies to transform and manage their business by harnessing the power of technology. The Group is guided everyday by its purpose of unleashing human energy through technology for an inclusive and sustainable future. It is a responsible and diverse organization of 270,000 team members in nearly 50 countries. With its strong 50 year heritage and deep industry expertise.
+        </p>
+        <p class="text-lg text-gray-600 leading-relaxed text-justify">
+          We are trusted by clients to address the entire breadth of their business needs, from strategy and design to operations, fueled by the fast evolving and innovative world of cloud, data, AI, connectivity, software, digital engineering and platforms.
+        </p>
+        
+        <div class="pt-4 flex gap-4">
+          <a href="#" class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-primary-50 hover:text-primary-600 transition-colors duration-300">
+            <i class="fab fa-facebook-f text-lg"></i>
+          </a>
+          <a href="#" class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-primary-50 hover:text-primary-600 transition-colors duration-300">
+            <i class="fab fa-twitter text-lg"></i>
+          </a>
+          <a href="#" class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-primary-50 hover:text-primary-600 transition-colors duration-300">
+            <i class="fab fa-linkedin-in text-lg"></i>
+          </a>
         </div>
       </div>
     </div>
   </div>
+</section>
 
+<!-- Beliefs Section -->
+<section class="py-20 bg-gray-50 border-t border-gray-100">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+    <div class="w-16 h-16 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
+      <i class="fa-solid fa-earth-americas text-2xl"></i>
+    </div>
+    <h5 class="text-2xl font-bold text-gray-900">What we believe in</h5>
+    <p class="text-xl text-gray-600 leading-relaxed">
+      As a leader in digital transformation, we are also a responsible company working to ensure that technology and innovation drive sustainable and social development. We have strengthened this commitment to our employees, clients, partners, communities & planet by leveraging three fundamental pillars: <strong class="text-primary-700">Diversity and Inclusion, Digital Inclusion, and Environmental Sustainability</strong>.
+    </p>
+  </div>
+</section>
 
 {% endblock %}

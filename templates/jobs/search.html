@@ -4,97 +4,143 @@
 {% load static %}
 
 {% block content %}
- 
- 
- <!-- Banner Starts Here -->
- <div class="banner header-text">
-      <div class="banner-item">
-  <div class="container text-center">
-  <div class="home-search p-5">
-      <h1 class="display-4 mb-4" id="showcase-info">
-       Find Your Next Great Role
-      </h1>
-      <div class="search">
-        <form action="{% url 'search' %}"> 
 
-          <div class="row mb-5">
-            <div class="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
-              <label class="sr-only">Role</label>
-              <input type="text" name="role" class="form-control" placeholder="Role(ex:Developer...)" 
-              value="{{values.role}}">
+<!-- Compact Banner Starts Here -->
+<div class="relative bg-primary-900 overflow-hidden flex items-center justify-center pt-20 pb-16">
+  <div class="absolute inset-0 bg-gradient-to-br from-primary-800 to-indigo-900 opacity-95"></div>
+  <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80')] bg-cover bg-center mix-blend-overlay border-b border-primary-800 opacity-30"></div>
+  
+  <div class="relative z-10 container mx-auto px-4 text-center">
+    <h1 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-8 drop-shadow-md">
+      Search Results
+    </h1>
+    
+    <!-- Search Form -->
+    <div class="bg-white/10 backdrop-blur-md p-4 rounded-2xl shadow-2xl max-w-5xl mx-auto border border-white/20">
+      <form action="{% url 'search' %}" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        
+        <div>
+          <label class="sr-only">Role</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <i class="fa fa-briefcase text-gray-400"></i>
+            </div>
+            <input type="text" name="role" class="block w-full pl-10 pr-3 py-3 border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 bg-white placeholder-gray-500 shadow-sm transition-shadow" placeholder="Role (Ex: Developer...)" value="{{ values.role }}">
+          </div>
+        </div>
+
+        <div>
+          <label class="sr-only">Location</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <i class="fa fa-map-marker text-gray-400"></i>
+            </div>
+            <select name="location" class="block w-full pl-10 pr-3 py-3 border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 bg-white shadow-sm appearance-none transition-shadow">
+              <option selected disabled>Location</option>
+              {% for key, value in location_choices.items %}
+              <option value="{{ key }}" {% if key == values.location %}selected{% endif %}>{{ value }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="sr-only">Job Type</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <i class="fa fa-file-alt text-gray-400"></i>
+            </div>
+            <select name="contract" class="block w-full pl-10 pr-3 py-3 border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 bg-white shadow-sm appearance-none transition-shadow">
+              <option selected disabled>Job Type</option>
+              {% for key, value in contract_choices.items %}
+              <option value="{{ key }}" {% if key == values.contract %}selected{% endif %}>{{ value }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <button type="submit" class="w-full h-full py-3 px-6 bg-primary-600 hover:bg-primary-500 text-white font-semibold rounded-xl shadow-md transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 flex items-center justify-center">
+            <i class="fa fa-search mr-2"></i> Update Search
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- Banner Ends Here -->
+
+<div class="container mx-auto px-4 mt-6">
+  {% include 'partials/_alerts.html' %}
+</div>
+
+<!-- Search Results Jobs -->
+<section class="py-16 bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="mb-8">
+      <h2 class="text-2xl font-bold text-gray-900">Found Jobs</h2>
+      <div class="w-16 h-1 bg-primary-600 rounded-full mt-2"></div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      {% if jobs %}
+        {% for job in jobs %}
+        <div class="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group border border-gray-100 flex flex-col h-full">
+          <!-- Image -->
+          <a href="{% url 'job' job.id %}" class="block relative h-48 overflow-hidden">
+            {% if job.main_image %}
+              <img src="{{ job.main_image.url }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+            {% else %}
+              <img src="{% static 'img/default.jpg' %}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+            {% endif %}
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-80"></div>
+            <div class="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+              <span class="px-3 py-1 bg-white/90 text-primary-700 text-xs font-bold rounded-full shadow-sm">
+                {{ job.contract }}
+              </span>
+              <span class="text-white font-bold tracking-wide">${{ job.salary|intcomma }}</span>
+            </div>
+          </a>
+
+          <!-- Content -->
+          <div class="p-6 flex flex-col flex-grow">
+            <h5 class="text-xl font-bold mb-2 line-clamp-1">
+              <a href="{% url 'job' job.id %}" class="text-gray-900 hover:text-primary-600 transition-colors">
+                {{ job.title }}
+              </a>
+            </h5>
+            
+            <div class="text-gray-500 text-sm mb-4 space-y-1 flex-grow">
+              <p class="flex items-center"><i class="fa fa-briefcase w-5 text-gray-400"></i> {{ job.role }}</p>
+              <p class="flex items-center text-gray-800 font-medium"><i class="fa fa-building w-5 text-primary-500"></i> {{ job.company }}</p>
             </div>
 
-            <div class="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
-              <label class="sr-only">Location</label>
-               <select name="location" class="form-control">
-                <option selected="true" disabled="disabled">Location</option>
-                {% for key, value in location_choices.items %}
-                  <option value="{{ key }}"
-                  {% if key == values.location %} 
-                    selected 
-                  {% endif %}
-                  > {{ value }} </option>
-                {% endfor %}
-              </select>
-            </div>
-
-            <div class="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
-              <label class="sr-only">Job Type</label>
-               <select name="contract" class="form-control">
-                <option selected="true" disabled="disabled">Job Type</option>
-                {% for key, value in contract_choices.items %}
-                  <option value="{{ key }}"
-                  {% if key == values.contract %} 
-                    selected 
-                  {% endif %}
-                  > {{ value }} </option>
-                {% endfor %}
-              </select>
-            </div>
-            <div class="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
-              <button type="submit" class="btn btn-secondary btn-lg btn-block text-white btn-search"><span class=""></span>Search Job</button>
+            <div class="border-t border-gray-100 pt-4 mt-auto">
+              <div class="flex flex-col space-y-2 text-sm text-gray-500">
+                <div class="flex items-center">
+                  <i class="fa fa-calendar-alt w-5 text-red-400"></i>
+                  Apply by {{ job.deadline|date:"M d, Y"|default:"Not specified" }}
+                </div>
+                <div class="flex items-center">
+                  <i class="fa fa-map-marker-alt w-5 text-green-500"></i>
+                  {{ job.location }}
+                </div>
+              </div>
             </div>
           </div>
-        </form>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="col-span-1 sm:col-span-2 lg:col-span-3 text-center py-16 bg-white rounded-2xl shadow-sm border border-gray-100">
+          <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary-50 text-primary-400 mb-4">
+            <i class="fa fa-search-minus text-3xl"></i>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-2">No jobs matched your search!</h3>
+          <p class="text-gray-500">Try adjusting your filters to find more opportunities.</p>
+        </div>
+      {% endif %}
     </div>
   </div>
-</div>
-</div>
-</div>
-
-<!-- Banner Ends Here -->
-<div class="latest-products">
-<div class="container">
-<div class="row">
-{% if jobs %}
-  {% for job in jobs %}
-    <div class="col-md-6 col-lg-4 mb-4">
-    <div class="product-item">
-    <a href="{% url 'job' job.id %}"><img src="{{ job.main_image.url }}" alt=""></a>
-    <div class="down-content">
-    <a href="{% url 'job' job.id %}"><h4> {{job.title}}</h4></a>
-    <h6>${{job.salary | intcomma}}</h6>
-    <h4><small><i class="fa fa-briefcase"></i> {{job.role}} <br> <strong><i class="fa fa-building"></i>
-    {{job.company}}</strong></small></h4>
-    <small>
-    <strong title="Posted on"><i class="fa fa-calendar"></i> Apply by {{job.deadline | date:"F d Y" }}</strong> &nbsp;&nbsp;&nbsp;&nbsp;
-    <br>
-    <strong title="Type"><i class="fa fa-file"></i> {{job.contract}}</strong> &nbsp;&nbsp;&nbsp;&nbsp;
-    <br>
-    <strong title="Location"><i class="fa fa-map-marker"></i> {{job.location}}</strong>
-    </small>
-    </div>
-    </div>
-    </div>
-  {% endfor %}
-{% else %}
-  <div class="col-md-12">
-  <p>No jobs found!</p>
-  </div>
-{% endif %}
-</div>
-</div>
-</div>
+</section>
 
 {% endblock %}
-    

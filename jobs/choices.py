@@ -2,6 +2,7 @@ location_choices = {
     "Mumbai": "Mumbai",
     "Pune": "Pune",
     "Bangalore": "Bangalore",
+    "Nashik" : "Nashik",
     "Remote": "Remote"
 }
 

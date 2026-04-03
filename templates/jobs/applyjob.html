@@ -3,55 +3,123 @@
 
 {% load static %}
 
-
 {% block content %}
 
-<div class="py-5 px-5 centered">
-  <h1 class="text-center py-5">Application Form</h1>
-<div class="form-group d-flex align-items-center justify-content-center">
-  <form action="{% url 'application' %}" method="POST" enctype="multipart/form-data" class="col-md-6 col-md-offset-6"> 
-    {% csrf_token %}
-    {% if user.is_authenticated %}
-      <input type="hidden" name="user_id" value="{{ user.id }}">
-    {% endif %}
-    <input type="hidden" name="job_id" value="{{ job.id }}">
-    <input type="hidden" name="creator" value="{{ job.creator }}">
-    <input type="hidden" name="creator_id" value="{{ job.creator.id }}"> 
+<!-- Form Section -->
+<section class="min-h-screen relative bg-gray-50 flex flex-col justify-center py-16 px-4 sm:px-6 lg:px-8">
+  <div class="absolute inset-0 z-0">
+    <!-- Subtle background pattern -->
+    <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9IiNFMkU4RjAiLz48L3N2Zz4=')] opacity-50"></div>
+  </div>
 
-
-    <div class="form-group">
-      <label for="job_name" class="col-form-label">Job Title:</label>
-      <input type="text" name="job" class="form-control" value="{{ job.title }}">
-    </div>
-    <div class="form-group">
-      <label for="name" class="col-form-label">Name:</label>
-      <input type="text" name="name" class="form-control"
-      {% if user.is_authenticated %}
-        value="{{user.first_name}} {{user.last_name}}"
-      {% endif %}
-      required>
-    </div>
-    <div class="form-group">
-      <label for="email" class="col-form-label">Email:</label>
-      <input type="email" name="email" class="form-control" 
-      {% if user.is_authenticated %}
-        value="{{user.email}}"
-      {% endif %}
-      required>
-    </div>
-    <div class="form-group">
-      <label for="phone" class="col-form-label">Phone:</label>
-      <input type="text" name="phone" class="form-control">
-    </div>    
-
-    <div class="form-group">
-        <label for="resume" class="col-form-label">Upload CV</label>
-        <input type="file" name="resume" class="form-control-file" id="file" required>
+  <div class="relative z-10 sm:mx-auto sm:w-full sm:max-w-xl">
+    
+    <div class="text-center mb-8">
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary-100 text-primary-600 mb-4 shadow-sm border border-primary-200">
+        <i class="fa fa-paper-plane text-2xl"></i>
       </div>
-      <hr>
-      <input type="submit" value="Submit" class="btn btn-block btn-secondary">
-    </form>
-</div>
-</div>
+      <h2 class="text-3xl font-extrabold text-gray-900 tracking-tight">
+        Apply for Position
+      </h2>
+      <p class="mt-2 text-lg text-gray-600">
+        {{ job.title }} at <span class="font-semibold text-primary-600">{{ job.company }}</span>
+      </p>
+    </div>
+
+    <!-- Alert space -->
+    <div class="mb-4">
+      {% include 'partials/_alerts.html' %}
+    </div>
+
+    <div class="bg-white py-8 px-6 sm:px-10 shadow-xl rounded-2xl border border-gray-100">
+      
+      <form action="{% url 'application' %}" method="POST" enctype="multipart/form-data" class="space-y-6"> 
+        
+        {% csrf_token %}
+
+        {% if user.is_authenticated %}
+          <input type="hidden" name="user_id" value="{{ user.id }}">
+        {% endif %}
+        <input type="hidden" name="job_id" value="{{ job.id }}">
+        <input type="hidden" name="creator" value="{{ job.creator }}">
+        <input type="hidden" name="creator_id" value="{{ job.creator.id }}"> 
+
+        <div>
+          <label class="block text-sm font-semibold text-gray-700">Position Applying For</label>
+          <div class="mt-1 relative rounded-md shadow-sm">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <i class="fa fa-briefcase text-gray-400"></i>
+            </div>
+            <input type="text" name="job" value="{{ job.title }}" class="focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-lg py-3 bg-gray-50 text-gray-600 font-medium cursor-not-allowed" readonly>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-gray-700">Full Name</label>
+          <div class="mt-1 relative rounded-md shadow-sm">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <i class="fa fa-user text-gray-400"></i>
+            </div>
+            <input type="text" name="name" 
+              {% if user.is_authenticated %}
+                value="{{user.first_name}} {{user.last_name}}"
+              {% endif %}
+              class="focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-lg py-3 hover:border-gray-400 transition-colors" placeholder="John Doe" required>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-gray-700">Email Address</label>
+          <div class="mt-1 relative rounded-md shadow-sm">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <i class="fa fa-envelope text-gray-400"></i>
+            </div>
+            <input type="email" name="email" 
+              {% if user.is_authenticated %}
+                value="{{user.email}}"
+              {% endif %}
+              class="focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-lg py-3 hover:border-gray-400 transition-colors" placeholder="you@example.com" required>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-gray-700">Phone Number</label>
+          <div class="mt-1 relative rounded-md shadow-sm">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <i class="fa fa-phone text-gray-400"></i>
+            </div>
+            <input type="tel" name="phone" class="focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-lg py-3 hover:border-gray-400 transition-colors" placeholder="+1 (555) 000-0000" required>
+          </div>
+        </div>    
+
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">Upload Resume / CV</label>
+          <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-xl hover:border-primary-400 hover:bg-primary-50 transition-all duration-300 group cursor-pointer relative" onclick="document.getElementById('file-upload').click()">
+            <div class="space-y-1 text-center">
+              <i class="fa-solid fa-cloud-arrow-up text-4xl text-gray-400 group-hover:text-primary-500 mb-2 transition-colors"></i>
+              <div class="flex text-sm text-gray-600 justify-center">
+                <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-primary-600 hover:text-primary-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary-500">
+                  <span>Upload a file</span>
+                  <input id="file-upload" name="resume" type="file" class="sr-only" required onchange="document.getElementById('file-name').textContent = this.files[0].name">
+                </label>
+                <p class="pl-1 text-gray-500 group-hover:text-gray-700">or drag and drop</p>
+              </div>
+              <p class="text-xs text-gray-500">PDF, DOC, DOCX up to 10MB</p>
+              <p id="file-name" class="text-sm font-semibold text-primary-600 mt-2"></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-4 border-t border-gray-100">
+          <button type="submit" class="w-full flex justify-center py-3.5 px-4 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-all duration-300 transform hover:-translate-y-0.5 mt-2">
+            Submit Application
+          </button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+</section>
 
 {% endblock %}

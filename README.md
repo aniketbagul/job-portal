@@ -1,75 +1,49 @@
-## Description
+# Django Job Portal
 
-Job portal is a web application where the candidates can register  and search for suitable jobs and employers can register to post job vacancies at their company. The application provides job catalogue and information which helps the candidates decide which jobs to apply for. 
+A straightforward, modern job board web application built using Django and Tailwind CSS. The platform connects candidates with job listings and provides employers with a custom dashboard to manage their postings and evaluate applicants.
 
-The 3 user roles are Candidate , Employer and Admin
+## Features
 
-### Candidate
-* Can search for jobs based on different criterias ( Location , Role , Contract )
-* Apply for any number of jobs
-* View applied jobs in the dashboard
-
-### Employer 
-* Can add / update / delete jobs
-* Can view job applications ( Only for their jobs )
-
-### Admin
-* Can add / remove employers
-* Can add / remove any user
-* Can add / update / delete jobs
-* Can view / delete any job applications 
-
+- **Job Searching & Filtering:** Users can browse active job listings and filter by location or role.
+- **User Accounts:** Full authentication system for logging in and registering.
+- **Custom Admin Dashboard:** Employers/Admins can add, edit, and delete job postings without relying on the default Django admin site.
+- **Application Tracking:** Candidates can apply to jobs by uploading their resumes (PDF or DOCX). Employers can view applications securely from their dashboard.
+- **ATS Resume Analyzer:** Includes an automated parsing engine (powered by PyPDF2 and docx2txt) that extracts applicant resume text and compares it against the job description to calculate a skill match score.
 
 ## Tech Stack
 
-* Django
-* Bootstrap 4
-* HTML / CSS
-* PostgreSQL
+- **Backend:** Python 3, Django
+- **Frontend:** HTML, Tailwind CSS (via CDN)
+- **Database:** SQLite (Default)
+- **Dependencies:** `PyPDF2`, `docx2txt`
 
+## Local Setup
 
-## Setup
+1. **Clone the repository** (or download the files).
+2. **Create a virtual environment** and activate it:
+   ```bash
+   python -m venv env
+   source env/bin/activate  # On macOS/Linux
+   env\Scripts\activate     # On Windows
+   ```
+3. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+4. **Run migrations:**
+   ```bash
+   python manage.py makemigrations
+   python manage.py migrate
+   ```
+5. **Start the development server:**
+   ```bash
+   python manage.py runserver
+   ```
+6. **Access the Application:** Open your browser to `http://127.0.0.1:8000/`.
 
-Clone the repository:
+## Administrator Usage
 
-```
-git clone https://github.com/karishmashuklaa/job-portal.git
-```
-
-Create a virtual environment to install dependencies in and activate it:
-
-```
-virtualenv env
-```
-
-```
-env/Scripts/activate
-```
-
-Make migrations: 
-
-```
-python manage.py makemigrations
-```
-
-```
-python manage.py migrate
-```
-
-Run the project:
-
-```
-python manage.py runserver
-```
-
-## Screenshots 
-
-<img width="960" alt="2021-05-18 (13)" src="https://user-images.githubusercontent.com/76456498/119213796-895d5280-badf-11eb-95f7-fa6ebb385b6d.png">
-
-<img width="960" alt="2021-05-18 (7)" src="https://user-images.githubusercontent.com/76456498/119213823-b27de300-badf-11eb-98b6-5e01b6bf5dde.png">
-
-<img width="960" alt="2021-05-18 (8)" src="https://user-images.githubusercontent.com/76456498/119213816-a1cd6d00-badf-11eb-841f-91349e37aadd.png">
-
-<img width="960" alt="2021-05-18 (9)" src="https://user-images.githubusercontent.com/76456498/119213806-99753200-badf-11eb-9625-badf05e4413f.png">
-
-
+To utilize the Employer Dashboard and ATS features:
+1. Create a superuser account using `python manage.py createsuperuser`.
+2. Login through the standard `/login/` UI.
+3. Access the Admin Panel via the top navigation bar to post jobs and review resumes.

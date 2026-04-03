@@ -1,14 +1,29 @@
-{% load static %}
-<footer>
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="inner-content">
-            <p>Copyright &copy AGENCY VERSE</a></p>
-          </div>
-        </div>
+<footer class="bg-white border-t border-gray-200 mt-auto">
+  <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+    <div class="md:flex md:items-center md:justify-between">
+      <div class="flex justify-center md:justify-start space-x-6 md:order-2 text-gray-400">
+        <a href="#" class="hover:text-primary-600 transition-colors">
+          <span class="sr-only">Facebook</span>
+          <i class="fab fa-facebook-f w-6 h-6 flex items-center justify-center"></i>
+        </a>
+        <a href="#" class="hover:text-primary-600 transition-colors">
+          <span class="sr-only">Instagram</span>
+          <i class="fab fa-instagram w-6 h-6 flex items-center justify-center"></i>
+        </a>
+        <a href="#" class="hover:text-primary-600 transition-colors">
+          <span class="sr-only">Twitter</span>
+          <i class="fab fa-twitter w-6 h-6 flex items-center justify-center"></i>
+        </a>
+        <a href="#" class="hover:text-primary-600 transition-colors">
+          <span class="sr-only">LinkedIn</span>
+          <i class="fab fa-linkedin-in w-6 h-6 flex items-center justify-center"></i>
+        </a>
+      </div>
+      <div class="mt-8 md:mt-0 md:order-1">
+        <p class="text-center text-base text-gray-500 font-medium">
+          &copy; {% now "Y" %} Job Portal. All rights reserved.
+        </p>
       </div>
     </div>
-  </footer>
-
-  
+  </div>
+</footer>

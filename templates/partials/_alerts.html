@@ -1,19 +1,37 @@
 {% if messages %}
+  <div class="fixed top-20 right-4 z-50 flex flex-col gap-2">
     {% for message in messages %}
-    <div id="message" class="container">
-        <div class="alert alert-{{message.tags}} alert-dismissible fade show text-center" role="alert">
-            <button type="button" class="close" data-dismiss="alert">
-            <span aria-hidden="true">&times;</span>
-            </button>
-        <strong>
-          {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-            Error: 
-          {% else %}
-            {{ message.tags | title }}
-          {% endif %}
-        </strong>
-        {{ message }}
+      <div class="p-4 rounded-md shadow-lg border-l-4 transition-all duration-300 transform translate-x-0
+        {% if message.tags == 'error' %}bg-red-50 border-red-500 text-red-700
+        {% elif message.tags == 'success' %}bg-green-50 border-green-500 text-green-700
+        {% elif message.tags == 'warning' %}bg-yellow-50 border-yellow-500 text-yellow-700
+        {% else %}bg-blue-50 border-blue-500 text-blue-700{% endif %}"
+        role="alert">
+        <div class="flex justify-between items-start">
+          <div class="flex items-center">
+            <strong>
+              {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                Error: 
+              {% else %}
+                {{ message.tags | title }}: 
+              {% endif %}
+            </strong>
+            <span class="ml-2">{{ message }}</span>
+          </div>
+          <button type="button" class="ml-4 text-gray-400 hover:text-gray-900 focus:outline-none" onclick="this.parentElement.parentElement.remove()">
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
         </div>
-    </div>
+      </div>
     {% endfor %}
+  </div>
+  <script>
+    // Auto-dismiss alerts after 5 seconds
+    setTimeout(() => {
+      document.querySelectorAll('[role="alert"]').forEach(el => {
+        el.style.opacity = '0';
+        setTimeout(() => el.remove(), 300);
+      });
+    }, 5000);
+  </script>
 {% endif %}

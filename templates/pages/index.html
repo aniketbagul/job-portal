@@ -2,197 +2,264 @@
 {% block title %} Welcome {% endblock %}
 {% load humanize %}
 {% load static %}
+
 {% block content %}
 
-  <!-- Banner Starts Here -->
-  <div class="banner header-text">
-    <div class="banner-item">
-  <div class="container text-center">
-  <div class="home-search p-5">
-      <h1 class="display-4 mb-4" id="showcase-info">
-       Find Your Next Great Role 
-      </h1>
-      <div class="search">
-        <form action="{% url 'search' %}">
+<!-- Hero Banner Starts Here -->
+<div class="relative bg-primary-900 overflow-hidden flex items-center justify-center min-h-[500px]">
+  <div class="absolute inset-0 bg-gradient-to-br from-primary-800 to-indigo-900 opacity-95"></div>
+  <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d')] bg-cover bg-center"></div>
+  
+  <div class="relative z-10 container mx-auto px-4 py-16 text-center">
+    <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight mb-6 drop-shadow-md">
+      Find Your Next Great Role
+    </h1>
+    <p class="text-primary-100 text-lg md:text-xl max-w-2xl mx-auto mb-10">Discover thousands of job opportunities tailored for you.</p>
+    
+    <!-- Search Form -->
+    <div class="bg-white/10 backdrop-blur-md p-4 rounded-2xl shadow-2xl max-w-5xl mx-auto border border-white/20">
+      <form action="{% url 'search' %}" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        
+        <div>
+          <label class="sr-only">Role</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <i class="fa fa-briefcase text-gray-400"></i>
+            </div>
+            <input type="text" name="role" class="block w-full pl-10 pr-3 py-3 border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 bg-white placeholder-gray-500 shadow-sm transition-shadow" placeholder="Role (Ex: Developer...)">
+          </div>
+        </div>
 
-          <div class="row mb-5">
-            <div class="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
-              <label class="sr-only">Role</label>
-              <input type="text" name="role" class="form-control" placeholder="Role (Ex: Developer...)" />
+        <div>
+          <label class="sr-only">Location</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <i class="fa fa-map-marker text-gray-400"></i>
+            </div>
+            <select name="location" class="block w-full pl-10 pr-3 py-3 border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 bg-white shadow-sm appearance-none transition-shadow">
+              <option selected disabled>Location</option>
+              {% for key, value in location_choices.items %}
+              <option value="{{ key }}">{{ value }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="sr-only">Job Type</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <i class="fa fa-file-alt text-gray-400"></i>
+            </div>
+            <select name="contract" class="block w-full pl-10 pr-3 py-3 border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 bg-white shadow-sm appearance-none transition-shadow">
+              <option selected disabled>Job Type</option>
+              {% for key, value in contract_choices.items %}
+              <option value="{{ key }}">{{ value }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <button type="submit" class="w-full h-full py-3 px-6 bg-primary-600 hover:bg-primary-500 text-white font-semibold rounded-xl shadow-md transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 flex items-center justify-center">
+            <i class="fa fa-search mr-2"></i> Search Jobs
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- Hero Banner Ends Here -->
+
+<div class="container mx-auto px-4 mt-6">
+  {% include 'partials/_alerts.html' %}
+</div>
+
+<!-- Featured Jobs -->
+<section class="py-20 bg-gray-50">
+  <div class="container mx-auto px-4 max-w-7xl">
+    <div class="text-center mb-12 flex flex-col items-center">
+      <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight mb-4">Featured Jobs</h2>
+      <div class="w-20 h-1 bg-primary-600 rounded-full mb-6"></div>
+      <a href="{% url 'jobs' %}" class="inline-flex items-center text-primary-600 font-semibold hover:text-primary-800 transition-colors">
+        View more opportunities <i class="fa-solid fa-arrow-right ml-2 text-sm"></i>
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      {% if jobs %}
+        {% for job in jobs %}
+        <div class="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group border border-gray-100 flex flex-col h-full">
+          <!-- Image -->
+          <a href="{% url 'job' job.id %}" class="block relative h-48 overflow-hidden">
+            {% if job.main_image %}
+              <img src="{{ job.main_image.url }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+            {% else %}
+              <img src="{% static 'img/default.jpg' %}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+            {% endif %}
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-80"></div>
+            <div class="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+              <span class="px-3 py-1 bg-white/90 text-primary-700 text-xs font-bold rounded-full shadow-sm">
+                {{ job.contract }}
+              </span>
+              <span class="text-white font-bold tracking-wide">${{ job.salary|intcomma }}</span>
+            </div>
+          </a>
+
+          <!-- Content -->
+          <div class="p-6 flex flex-col flex-grow">
+            <h5 class="text-xl font-bold mb-2 line-clamp-1">
+              <a href="{% url 'job' job.id %}" class="text-gray-900 hover:text-primary-600 transition-colors">
+                {{ job.title }}
+              </a>
+            </h5>
+            
+            <div class="text-gray-500 text-sm mb-4 space-y-1 flex-grow">
+              <p class="flex items-center"><i class="fa fa-briefcase w-5 text-gray-400"></i> {{ job.role }}</p>
+              <p class="flex items-center text-gray-800 font-medium"><i class="fa fa-building w-5 text-primary-500"></i> {{ job.company }}</p>
             </div>
 
-            <div class="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
-              <label class="sr-only">Location</label>
-               <select name="location" class="form-control">
-                <option selected="true" disabled="disabled">Location</option>
-                {% for key, value in location_choices.items %}
-                  <option value="{{ key }}">{{ value }}</option>
-                {% endfor %} 
-              </select>
-            </div>
-
-            <div class="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
-              <label class="sr-only">Job Type</label>
-               <select name="contract" class="form-control">
-                <option selected="true" disabled="disabled">Job Type</option>
-                {% for key, value in contract_choices.items %}
-                  <option value="{{ key }}">{{ value }}</option>
-                {% endfor %}
-              </select>
-            </div>
-            <div class="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
-              <button type="submit" class="btn btn-secondary btn-lg btn-block text-white btn-search"><span class=""></span><i class="fa fa-search"></i> Search Job</button>
+            <div class="border-t border-gray-100 pt-4 mt-auto">
+              <div class="flex flex-col space-y-2 text-sm text-gray-500">
+                <div class="flex items-center">
+                  <i class="fa fa-calendar-alt w-5 text-red-400"></i>
+                  Apply by {{ job.deadline|date:"M d, Y"|default:"Not specified" }}
+                </div>
+                <div class="flex items-center">
+                  <i class="fa fa-map-marker-alt w-5 text-green-500"></i>
+                  {{ job.location }}
+                </div>
+              </div>
             </div>
           </div>
-        </form>
-    </div>
-  </div>
-</div>
-</div>
-</div>
-<!-- Banner Ends Here -->
-<!-- Alerts -->
-<div class="mt-3">
-{% include 'partials/_alerts.html' %}
-</div>
-
-<div class="latest-products">
-<div class="container">
-<div class="row">
-  <div class="col-md-12">
-    <div class="section-heading">
-      <h2>Featured Jobs </h2>
-      <a href="{% url 'jobs' %}">view more <i class="fa fa-angle-right"></i></a>
-    </div>
-  </div>
-
-{% if jobs %}
-
-  {% for job in jobs %}
-    <div class="col-md-4">
-    <div class="product-item">
-    <a href="{% url 'job' job.id %}"><img src="{{ job.main_image.url }}" alt=""></a>
-    <div class="down-content">
-    <a href="{% url 'job' job.id %}"><h4> {{job.title}}</h4></a>
-    <h6>${{job.salary | intcomma}}</h6>
-    <h4><small><i class="fa fa-briefcase"></i> {{job.role}}<br> <strong><i class="fa fa-building"></i>  {{job.company}}</strong></small></h4>
-    <small>
-    <strong title="Posted on"><i class="fa fa-calendar"></i> Apply by {{job.deadline | date:"F d Y" }}</strong> &nbsp;&nbsp;&nbsp;&nbsp;
-    <br>
-    <strong title="Type"><i class="fa fa-file"></i> {{job.contract}}</strong> &nbsp;&nbsp;&nbsp;&nbsp;
-    <br>
-    <strong title="Location"><i class="fa fa-map-marker"></i> {{job.location}}</strong>
-    </small>
-    </div>
-    </div>
-    </div>
-  {% endfor %}
-
-{% else %}
-  <div class="col-md-12">
-    <p>No jobs found!</p>
-  </div>
-{% endif %}
-</div>
-</div>
-</div>
-
-
-<div class="services" style="background-image: url(https://images.unsplash.com/photo-1533090161767-e6ffed986c88?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80);" >
-<div class="best-features">
-<div class="container">
-<div class="row">
-  <div class="col-md-12">
-    <div class="section-heading">
-      <h2 style="color: #000000;">ABOUT US</h2>
-    </div>
-  </div>
-  <div class="col-md-6">
-    <div class="left-content">
-      <p>We are  a global leader in partnering with companies to transform and manage their business by harnessing the power of technology. The Group is guided everyday by its purpose of unleashing human energy through technology for an inclusive and sustainable future. It is a responsible and diverse organization of 270,000 team members in nearly 50 countries. With its strong 50 year heritage and deep industry expertise.<br><br>
-        As a leader in digital transformation, we are also a responsible company working to ensure that technology and innovation drive sustainable and social development. We have strengthened this commitment to our employees, clients, partners, communities & planet by leveraging three fundamental pillars: Diversity and Inclusion, Digital Inclusion, and Environmental Sustainability.</p>
-      
-      <a href="{% url 'about' %}" class="filled-button">Read More</a>
-    </div>
-  </div>
-  <div class="col-md-6">
-    <div class="right-image">
-      <img src="https://images.unsplash.com/photo-1557426272-fc759fdf7a8d?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" alt="">
-    </div>
-  </div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-
-
-<div class="call-to-action">
-<div class="container">
-<div class="row">
-  <div class="col-md-12">
-    <div class="inner-content">
-      <div class="row">
-        <div class="col-md-8">
-          <h4>Find the perfect candidates with us.</h4>
-          <p>Join us</p>
         </div>
-        <div class="col-lg-4 col-md-6 text-right">
-          <button class="filled-button" data-toggle="modal" data-target="#inquiryModal">Join Us</button>
+        {% endfor %}
+      {% else %}
+        <div class="col-span-1 sm:col-span-2 lg:col-span-3 text-center py-12">
+          <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 text-gray-400 mb-4">
+            <i class="fa fa-folder-open text-2xl"></i>
+          </div>
+          <p class="text-xl text-gray-500">No jobs found!</p>
         </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<!-- About Us Snippet Section -->
+<section class="relative py-24 bg-white overflow-hidden">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <div class="space-y-8">
+        <div>
+          <h2 class="text-sm font-bold text-primary-600 uppercase tracking-widest mb-2">ABOUT US</h2>
+          <h3 class="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">Our Mission & Beliefs</h3>
+        </div>
+        <p class="text-lg text-gray-600 leading-relaxed text-justify">
+          We are a global leader in partnering with companies to transform and manage their business by harnessing the power of technology. The Group is guided everyday by its purpose of unleashing human energy through technology for an inclusive and sustainable future. It is a responsible and diverse organization of 270,000 team members in nearly 50 countries.
+        </p>
+        <p class="text-lg text-gray-600 leading-relaxed text-justify">
+          As a leader in digital transformation, we are also a responsible company working to ensure that technology and innovation drive sustainable and social development.
+        </p>
+        <div class="pt-4">
+          <a href="{% url 'about' %}" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-primary-600 hover:bg-primary-700 transition-colors duration-300">
+            Read More
+          </a>
+        </div>
+      </div>
+      <div class="relative group">
+        <div class="absolute inset-0 bg-primary-200 rounded-3xl transform translate-x-4 translate-y-4 transition-transform duration-500 group-hover:translate-x-2 group-hover:translate-y-2"></div>
+        <img src="https://images.unsplash.com/photo-1533090161767-e6ffed986c88?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" alt="About us" class="relative rounded-3xl shadow-xl object-cover h-[500px] w-full z-10 transition-transform duration-500 group-hover:scale-[1.01]">
       </div>
     </div>
   </div>
-</div>
-</div>
-</div> 
- <!-- Inquiry Modal -->
- <div class="modal fade" id="inquiryModal" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="inquiryModalLabel">Make An Inquiry</h5>
-        <button type="button" class="close" data-dismiss="modal">
-          <span>&times;</span>
+</section>
+
+<!-- Call to Action -->
+<section class="bg-gradient-to-r from-primary-800 to-primary-600 py-16">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col md:flex-row items-center justify-between text-center md:text-left">
+      
+      <div class="mb-8 md:mb-0">
+        <!-- Change here -->
+        <h4 class="text-3xl font-bold text-blue-500 mb-2">
+          Find the perfect candidates with us.
+        </h4>
+
+        <!-- Change here -->
+        <p class="text-blue-300 text-lg">
+          Partner with us to grow your team.
+        </p>
+      </div>
+
+      <div>
+        <button onclick="document.getElementById('inquiryModal').classList.remove('hidden')" 
+          class="inline-block bg-white text-blue-700 font-bold px-8 py-4 rounded-full shadow-lg hover:bg-gray-50 transition-all duration-300 transform hover:-translate-y-1">
+          
+          Make an Inquiry <i class="fa fa-paper-plane ml-2"></i>
         </button>
       </div>
-      <div class="modal-body">
-        <form action="{% url 'contact' %}" method="POST">
+
+    </div>
+  </div>
+</section>
+<!-- Inquiry Modal (Tailwind version) -->
+<div id="inquiryModal" class="hidden fixed inset-0 z-[100] overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+  <!-- Backdrop -->
+  <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+    <div class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity backdrop-blur-sm" aria-hidden="true" onclick="document.getElementById('inquiryModal').classList.add('hidden')"></div>
+
+    <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+    <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full relative">
+      <div class="bg-primary-600 px-6 py-4 flex justify-between items-center">
+        <h3 class="text-xl leading-6 font-bold text-white shadow-sm" id="modal-title">
+          Make An Inquiry
+        </h3>
+        <button type="button" class="text-primary-100 hover:text-white transition-colors" onclick="document.getElementById('inquiryModal').classList.add('hidden')">
+          <i class="fa-solid fa-xmark text-xl"></i>
+        </button>
+      </div>
+      <div class="px-6 py-6">
+        <form action="{% url 'contact' %}" method="POST" class="space-y-4">
           {% csrf_token %}
 
           {% if user.is_authenticated %}
-            <input type="hidden" name="user_id" value="{{user.id}}">
+          <input type="hidden" name="user_id" value="{{user.id}}">
           {% else %}
-            <input type="hidden" name="user_id" value="0">
+          <input type="hidden" name="user_id" value="0">
           {% endif %}
 
-          <div class="form-group">
-            <label for="name" class="col-form-label">Name:</label>
-            <input type="text" name="name" class="form-control" required>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+            <input type="text" name="name" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-primary-500 focus:border-primary-500 transition-colors" required>
           </div>
 
-          <div class="form-group">
-            <label for="company" class="col-form-label">Company:</label>
-            <input type="text" name="company" class="form-control" required>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Company</label>
+            <input type="text" name="company" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-primary-500 focus:border-primary-500 transition-colors" required>
           </div>
 
-          <div class="form-group">
-            <label for="email" class="col-form-label">Email:</label>
-            <input type="email" name="email" class="form-control" required>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <input type="email" name="email" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-primary-500 focus:border-primary-500 transition-colors" required>
           </div>
 
-          <div class="form-group">
-            <label for="phone" class="col-form-label">Phone:</label>
-            <input type="text" name="phone" class="form-control">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+            <input type="text" name="phone" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-primary-500 focus:border-primary-500 transition-colors">
           </div>
 
-          <div class="form-group">
-            <label for="message" class="col-form-label">Message:</label>
-            <textarea name="message" class="form-control"></textarea>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Message</label>
+            <textarea name="message" rows="3" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"></textarea>
           </div>
-          <hr>
-          <input type="submit" value="Send" class="filled-button">
+          
+          <div class="pt-4 border-t border-gray-100 mt-6">
+            <button type="submit" class="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-3 px-4 rounded-xl transition-colors shadow-md">
+              Send Inquiry
+            </button>
+          </div>
         </form>
       </div>
     </div>

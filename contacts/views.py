@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import Contact
 
@@ -11,10 +11,14 @@ def contact(request):
         message = request.POST['message']
         user_id = request.POST['user_id']
         
-        contact = Contact(name=name, company=company, email=email, phone=phone, message=message, user_id=user_id )
+        Contact.objects.create(
+            name=name,
+            company=company,
+            email=email,
+            phone=phone,
+            message=message,
+            user_id=user_id
+        )
 
-        contact.save()
-
-        messages.success(request, 'Your request has been submitted, we will get back to you soon!')
+        messages.success(request, 'Your request has been submitted!')
         return redirect('index')
-

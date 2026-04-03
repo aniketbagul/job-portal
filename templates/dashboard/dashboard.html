@@ -1,0 +1,91 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+
+<!-- Header -->
+<div class="mb-8">
+    <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight flex items-center">
+        Welcome Admin 👋
+    </h1>
+    <p class="mt-2 text-gray-500">Manage your job portal efficiently from this dashboard.</p>
+</div>
+
+<!-- Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+    
+    <!-- Total Jobs Card -->
+    <div class="bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden group hover:-translate-y-1 transition-transform duration-300">
+        <div class="absolute -right-6 -top-6 opacity-20 text-9xl group-hover:scale-110 transition-transform duration-500">
+            <i class="fa fa-briefcase"></i>
+        </div>
+        <div class="relative z-10">
+            <h3 class="text-primary-100 font-semibold text-lg mb-1">Total Jobs</h3>
+            <p class="text-5xl font-bold">{{ total_jobs }}</p>
+        </div>
+        <div class="relative z-10 mt-6 mt-4 opacity-80 flex items-center text-sm font-medium">
+            <i class="fa fa-arrow-up mr-2"></i> Active listings
+        </div>
+    </div>
+
+    <!-- Total Users Card -->
+    {% if request.user.is_superuser %}
+    <div class="bg-gradient-to-br from-purple-500 to-indigo-700 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden group hover:-translate-y-1 transition-transform duration-300">
+        <div class="absolute -right-6 -top-6 opacity-20 text-9xl group-hover:scale-110 transition-transform duration-500">
+            <i class="fa fa-users"></i>
+        </div>
+        <div class="relative z-10">
+            <h3 class="text-indigo-100 font-semibold text-lg mb-1">Registered Users</h3>
+            <p class="text-5xl font-bold">{{ total_users }}</p>
+        </div>
+        <div class="relative z-10 mt-6 mt-4 opacity-80 flex items-center text-sm font-medium">
+            <i class="fa fa-users-cog mr-2"></i> Platform accounts
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Total Applications Card -->
+    <div class="bg-gradient-to-br from-teal-500 to-emerald-700 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden group hover:-translate-y-1 transition-transform duration-300">
+        <div class="absolute -right-6 -top-6 opacity-20 text-9xl group-hover:scale-110 transition-transform duration-500">
+            <i class="fa fa-file-contract"></i>
+        </div>
+        <div class="relative z-10">
+            <h3 class="text-emerald-100 font-semibold text-lg mb-1">Total Applications</h3>
+            <p class="text-5xl font-bold">{{ total_applications }}</p>
+        </div>
+        <div class="relative z-10 mt-6 mt-4 opacity-80 flex items-center text-sm font-medium">
+            <i class="fa fa-arrow-up mr-2"></i> Received resumes
+        </div>
+    </div>
+
+</div>
+
+<!-- Quick Actions -->
+<div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+    <h3 class="text-xl font-bold text-gray-900 mb-6 border-b border-gray-100 pb-4">Quick Actions</h3>
+    
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <a href="/dashboard/jobs/add/" class="flex items-center p-4 bg-gray-50 rounded-xl border border-gray-200 hover:border-primary-300 hover:bg-primary-50 transition-colors group">
+            <div class="w-12 h-12 rounded-full bg-white flex items-center justify-center text-primary-600 shadow-sm border border-gray-100 group-hover:scale-110 transition-transform">
+                <i class="fa fa-plus text-xl"></i>
+            </div>
+            <div class="ml-4">
+                <h4 class="text-lg font-bold text-gray-900 group-hover:text-primary-700 transition-colors">Add New Job</h4>
+                <p class="text-sm text-gray-500">Post a new job vacancy</p>
+            </div>
+            <i class="fa fa-chevron-right ml-auto text-gray-400 group-hover:text-primary-500"></i>
+        </a>
+
+        <a href="/dashboard/jobs/" class="flex items-center p-4 bg-gray-50 rounded-xl border border-gray-200 hover:border-primary-300 hover:bg-primary-50 transition-colors group">
+            <div class="w-12 h-12 rounded-full bg-white flex items-center justify-center text-primary-600 shadow-sm border border-gray-100 group-hover:scale-110 transition-transform">
+                <i class="fa fa-list-alt text-xl"></i>
+            </div>
+            <div class="ml-4">
+                <h4 class="text-lg font-bold text-gray-900 group-hover:text-primary-700 transition-colors">Manage Jobs</h4>
+                <p class="text-sm text-gray-500">View, edit or delete jobs</p>
+            </div>
+            <i class="fa fa-chevron-right ml-auto text-gray-400 group-hover:text-primary-500"></i>
+        </a>
+    </div>
+</div>
+
+{% endblock %}

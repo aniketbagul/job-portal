@@ -1,0 +1,132 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+
+<div class="mb-8">
+    <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight flex items-center">
+        <div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center mr-3 shadow-sm border border-blue-200">
+            <i class="fa fa-edit"></i>
+        </div>
+        Edit Job: {{ job.title }}
+    </h1>
+    <p class="mt-2 text-gray-500">Update the details below to modify this job listing.</p>
+</div>
+
+<div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="p-8">
+        <form method="POST" enctype="multipart/form-data" class="space-y-8">
+            {% csrf_token %}
+
+            <!-- Section 1: Basic Details -->
+            <div>
+                <h3 class="text-lg font-bold text-gray-900 mb-4 pb-2 border-b border-gray-100">1. Basic Details</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Company Name</label>
+                        <input type="text" name="company" value="{{ job.company }}" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors bg-gray-50 hover:bg-white" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Job Title</label>
+                        <input type="text" name="title" value="{{ job.title }}" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors bg-gray-50 hover:bg-white" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Role / Department</label>
+                        <input type="text" name="role" value="{{ job.role }}" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors bg-gray-50 hover:bg-white" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Location</label>
+                        <select name="location" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors bg-gray-50 hover:bg-white appearance-none" required>
+                            <option value="Mumbai" {% if job.location == 'Mumbai' %}selected{% endif %}>Mumbai</option>
+                            <option value="Pune" {% if job.location == 'Pune' %}selected{% endif %}>Pune</option>
+                            <option value="Bangalore" {% if job.location == 'Bangalore' %}selected{% endif %}>Bangalore</option>
+                            <option value="Remote" {% if job.location == 'Remote' %}selected{% endif %}>Remote</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: Details & Compensation -->
+            <div>
+                <h3 class="text-lg font-bold text-gray-900 mb-4 pb-2 border-b border-gray-100">2. Description & Compensation</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Contract Type</label>
+                        <select name="contract" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors bg-gray-50 hover:bg-white appearance-none" required>
+                            <option value="Full Time" {% if job.contract == 'Full Time' %}selected{% endif %}>Full Time</option>
+                            <option value="Part Time" {% if job.contract == 'Part Time' %}selected{% endif %}>Part Time</option>
+                            <option value="Freelance" {% if job.contract == 'Freelance' %}selected{% endif %}>Freelance</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Salary ($ p.a.)</label>
+                        <input type="text" name="salary" value="{{ job.salary }}" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors bg-gray-50 hover:bg-white" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Vacancies</label>
+                        <input type="number" name="vacancy" value="{{ job.vacancy }}" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors bg-gray-50 hover:bg-white" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Experience Required</label>
+                        <input type="text" name="experience" value="{{ job.experience }}" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors bg-gray-50 hover:bg-white" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Application Deadline</label>
+                        <input type="datetime-local" name="deadline" value="{{ formatted_deadline }}" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors bg-gray-50 hover:bg-white" required>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Job Description</label>
+                        <textarea name="description" rows="5" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors bg-gray-50 hover:bg-white" required>{{ job.description }}</textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">About the Company</label>
+                        <textarea name="about" rows="4" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors bg-gray-50 hover:bg-white" required>{{ job.about }}</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 3: Media -->
+            <div>
+                <h3 class="text-lg font-bold text-gray-900 mb-4 pb-2 border-b border-gray-100">3. Media</h3>
+                <div class="mb-4">
+                    <p class="text-sm font-medium text-gray-700 mb-2">Current Image:</p>
+                    {% if job.main_image %}
+                        <img src="{{ job.main_image.url }}" class="h-32 rounded-lg border border-gray-200">
+                    {% else %}
+                        <p class="text-sm text-gray-500 italic">No image uploaded.</p>
+                    {% endif %}
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Upload New Image (Optional)</label>
+                    <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-xl hover:border-blue-400 hover:bg-blue-50 transition-all duration-300 group cursor-pointer bg-gray-50" onclick="document.getElementById('image-upload').click()">
+                        <div class="space-y-1 text-center">
+                            <i class="fa fa-image text-4xl text-gray-400 group-hover:text-blue-500 mb-2 transition-colors"></i>
+                            <div class="flex text-sm text-gray-600 justify-center">
+                                <label for="image-upload" class="relative cursor-pointer rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none">
+                                    <span>Upload an image</span>
+                                    <input id="image-upload" name="main_image" type="file" class="sr-only" accept="image/*" onchange="document.getElementById('img-file-name').textContent = this.files[0].name">
+                                </label>
+                            </div>
+                            <p class="text-xs text-gray-500">PNG, JPG, WEBP up to 5MB</p>
+                            <p id="img-file-name" class="text-sm font-semibold text-blue-600 mt-2"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-6 border-t border-gray-100 flex justify-end gap-4 mt-8">
+                <a href="/dashboard/jobs/" class="px-6 py-3 border border-gray-300 rounded-xl text-gray-700 font-bold hover:bg-gray-50 transition-colors shadow-sm">
+                    Cancel
+                </a>
+                <button type="submit" class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-transform transform hover:-translate-y-0.5">
+                    Update Job
+                </button>
+            </div>
+            
+        </form>
+    </div>
+</div>
+
+{% endblock %}

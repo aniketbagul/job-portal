@@ -1,82 +1,57 @@
 {% load static %}
 <!-- Header -->
-<header class="">
-  <nav class="navbar navbar-expand-lg">
-    <div class="container">
-      <a class="navbar-brand" href="{% url 'index' %}"><h2>Agency<em>Verse</em></h2></a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarResponsive">
-        <ul class="navbar-nav ml-auto">
-            <li 
-            {% if '/' == request.path %}
-              class="nav-item active"
-            {% else %}
-              class="nav-item"
-            {% endif %}
-            >
-                <a class="nav-link" href="{% url 'index' %}">HOME</a>
-            </li>
-
-            <li 
-            {% if 'about' in request.path %}
-              class="nav-item active"
-            {% else %}
-              class="nav-item"
-            {% endif %}
-            >
-            <a class="nav-link" href="{% url 'about' %}">ABOUT</a></li>
-
-            <li 
-            {% if 'jobs' in request.path %}
-              class="nav-item active"
-            {% else %}
-              class="nav-item"
-            {% endif %}
-            >
-            <a class="nav-link" href="{% url 'jobs' %}">JOBS</a></li>
-
-              <!-- If the user is logged in then display dasboard and logout -->
-              {% if user.is_authenticated %}
-                <li 
-                {% if 'dashboard' in request.path %}
-                  class="nav-item active"
-                {% else %}
-                  class="nav-item"
-                {% endif %}
-                >
-                  <a class="nav-link" href="{% url 'dashboard' %}" style="text-transform: uppercase;">
-                    WELCOME {{user.first_name}} (DASHBOARD)</a>
-                </li>
+<header class="bg-white shadow-sm sticky top-0 z-50">
+  <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
+    <a href="{% url 'index' %}" class="text-2xl font-bold text-primary-600 tracking-tight">
+      Job Portal
+    </a>
     
-                <li class="nav-item">
-                  <a href="javascript:{document.getElementById('logout').submit()}" class="nav-link">
-                    <i class="fas fa-sign-out-alt"></i> LOGOUT
-                  </a>
-                  <form action="{% url 'logout' %}" method="POST" id="logout">
-                    {% csrf_token %}
-                    <input type="hidden">
-                  </form>
-                </li>
-              {% else %}
-                <li 
-                {% if 'login' in request.path %}
-                  class="nav-item active"
-                {% else %}
-                  class="nav-item"
-                {% endif %}
-                >
-                  <a class="nav-link" href="{% url 'login' %}">
-                    <i class="fas fa-sign-in-alt"></i>
+    <!-- Mobile Menu Button -->
+    <button class="lg:hidden text-gray-500 hover:text-gray-700 focus:outline-none" type="button" aria-label="Toggle navigation" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+      <i class="fa-solid fa-bars text-xl"></i>
+    </button>
     
-                    LOGIN</a>
-                </li> 
-              {% endif %}
-           
+    <!-- Navbar Links -->
+    <div class="hidden lg:flex lg:items-center lg:space-x-8" id="navbarResponsive">
+        <a href="{% url 'index' %}" class="{% if '/' == request.path %}text-primary-600 font-semibold{% else %}text-gray-600 hover:text-primary-500{% endif %} transition-colors duration-200">HOME</a>
+        <a href="{% url 'about' %}" class="{% if 'about' in request.path %}text-primary-600 font-semibold{% else %}text-gray-600 hover:text-primary-500{% endif %} transition-colors duration-200">ABOUT</a>
+        <a href="{% url 'jobs' %}" class="{% if 'jobs' in request.path %}text-primary-600 font-semibold{% else %}text-gray-600 hover:text-primary-500{% endif %} transition-colors duration-200">JOBS</a>
 
-        </ul>
-      </div>
+        {% if user.is_authenticated %}
+          <a href="{% url 'admin_dashboard' %}" class="{% if 'admin_dashboard' in request.path %}text-primary-600 font-semibold{% else %}text-gray-600 hover:text-primary-500{% endif %} font-medium transition-colors duration-200 text-sm tracking-wide flex items-center">
+            <i class="fa fa-chart-line mr-1"></i> Admin Panel
+          </a>
+          <a href="{% url 'dashboard' %}" class="{% if request.path == '/accounts/dashboard/' %}text-primary-600 font-semibold{% else %}text-gray-600 hover:text-primary-500{% endif %} uppercase transition-colors duration-200 text-sm tracking-wide">
+            Welcome {{user.first_name}}
+          </a>
+          <a href="javascript:{document.getElementById('logout').submit()}" class="text-gray-600 hover:text-red-500 transition-colors duration-200">
+            <i class="fas fa-sign-out-alt mr-1"></i> Logout
+          </a>
+          <form action="{% url 'logout' %}" method="POST" id="logout" class="hidden">
+            {% csrf_token %}
+            <input type="hidden">
+          </form>
+        {% else %}
+          <a href="{% url 'login' %}" class="{% if 'login' in request.path %}bg-primary-700{% else %}bg-primary-600{% endif %} text-white px-6 py-2.5 rounded-full hover:bg-primary-700 transition-all duration-300 shadow-sm shadow-primary-500/30 text-sm font-medium">
+            <i class="fas fa-sign-in-alt mr-1"></i> Login
+          </a>
+        {% endif %}
     </div>
   </nav>
+
+  <!-- Mobile Menu -->
+  <div class="hidden lg:hidden border-t border-gray-100 bg-white absolute w-full shadow-lg" id="mobile-menu">
+    <div class="flex flex-col px-4 py-2 space-y-2">
+      <a href="{% url 'index' %}" class="py-2 text-gray-700 hover:text-primary-600">HOME</a>
+      <a href="{% url 'about' %}" class="py-2 text-gray-700 hover:text-primary-600">ABOUT</a>
+      <a href="{% url 'jobs' %}" class="py-2 text-gray-700 hover:text-primary-600">JOBS</a>
+      {% if user.is_authenticated %}
+        <a href="{% url 'admin_dashboard' %}" class="py-2 text-gray-700 hover:text-primary-600 font-medium whitespace-nowrap"><i class="fa fa-chart-line mr-1"></i> Admin Panel</a>
+        <a href="{% url 'dashboard' %}" class="py-2 text-gray-700 hover:text-primary-600 uppercase text-sm">Welcome {{user.first_name}}</a>
+        <a href="javascript:{document.getElementById('logout').submit()}" class="py-2 text-red-500">Logout</a>
+      {% else %}
+        <a href="{% url 'login' %}" class="py-2 text-primary-600 font-medium">Login</a>
+      {% endif %}
+    </div>
+  </div>
 </header>

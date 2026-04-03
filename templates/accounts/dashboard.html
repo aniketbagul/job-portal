@@ -2,52 +2,105 @@
 {% block title %} User Dashboard {% endblock %}
 {% block content %}
 
-<section class="py-5" >
-    <div class="container">
-      <div class="row text-center">
-        <div class="col-md-12">
-          <h1 class="display-4 py-5 text-dark">User Dashboard</h1>
-          <p class="lead">Manage your AgencyVerse account</p>
+<!-- Header Section -->
+<section class="bg-gray-50 border-b border-gray-200 pt-16 pb-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center space-x-5">
+            <div class="flex-shrink-0 h-16 w-16 bg-primary-100 rounded-full flex items-center justify-center border-2 border-white shadow-sm text-primary-600">
+                <i class="fa fa-user text-2xl"></i>
+            </div>
+            <div>
+                <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">User Dashboard</h1>
+                <p class="text-sm font-medium text-gray-500 mt-1">Manage your applications and profile.</p>
+            </div>
         </div>
-      </div>
     </div>
-  </section>
+</section>
 
-  <!-- Alerts -->
-  {% include 'partials/_alerts.html' %}
+<!-- Alerts -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+    {% include 'partials/_alerts.html' %}
+</div>
 
-  <section id="dashboard" class="py-4">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12">
-          <h2>Welcome {{ user.first_name }}!</h2>
-          {% if applications %}
-          <p>Here are the jobs you have applied for</p>
-          <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Jobs</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for application in applications %}
-              <tr>
-                <td>{{ application.id }}</td>
-                <td>{{ application.job }}</td>
-                <td>
-                  <a class="btn btn-secondary" href="{% url 'job' application.job_id %}">View Job</a>
-                </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-          {% else %}
-          <p>You have not made any inquiries yet! </p>
-        {% endif %}
+<!-- Main Content -->
+<section class="py-8 bg-white min-h-[50vh]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        
+        <!-- Welcome banner -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex items-center justify-between">
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900">Welcome back, {{ user.first_name }}! 👋</h2>
+                <p class="text-gray-500 mt-1">Here is a summary of your recent activity.</p>
+            </div>
+            <a href="{% url 'jobs' %}" class="hidden sm:inline-flex items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 transition-colors">
+                <i class="fa fa-search mr-2"></i> Browse Jobs
+            </a>
         </div>
-      </div>
+
+        <!-- Applications Table -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="px-6 py-5 border-b border-gray-100 bg-gray-50/50 flex justify-between items-center">
+                <h3 class="text-lg font-bold text-gray-900 flex items-center">
+                    <i class="fa-solid fa-file-contract text-primary-500 mr-2"></i> Your Applied Jobs
+                </h3>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-800">
+                    {{ applications|length }} Apps
+                </span>
+            </div>
+            
+            <div class="p-0">
+                {% if applications %}
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                            <tr>
+                                <th scope="col" class="px-6 py-4 text-left">Application ID</th>
+                                <th scope="col" class="px-6 py-4 text-left">Role & Company</th>
+                                <th scope="col" class="px-6 py-4 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-100">
+                            {% for application in applications %}
+                            <tr class="hover:bg-gray-50 transition-colors duration-150">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2.5 py-1 text-xs font-medium bg-gray-100 text-gray-800 rounded-md border border-gray-200">
+                                        #{{ application.id }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <div class="ml-0">
+                                            <div class="text-sm font-bold text-gray-900">{{ application.job }}</div>
+                                            <div class="text-sm text-gray-500">Submitted successfully</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <a href="{% url 'job' application.job_id %}" class="inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none transition-colors">
+                                        View Details
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-12 px-4">
+                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-50 text-gray-400 mb-4">
+                        <i class="fa fa-folder-open text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-medium text-gray-900 mb-1">No applications yet</h3>
+                    <p class="text-gray-500 mb-6">You haven't applied to any jobs yet. Start looking for your next role!</p>
+                    <a href="{% url 'jobs' %}" class="inline-flex items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 transition-colors">
+                        Explore Jobs Now
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
     </div>
-  </section>
-  {% endblock %}
+</section>
+
+{% endblock %}

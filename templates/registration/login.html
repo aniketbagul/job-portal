@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-container {
+            background: #020617;
+            padding: 40px;
+            border-radius: 15px;
+            width: 350px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            text-align: center;
+            color: white;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #8b5cf6;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: none;
+            background: #1e293b;
+            color: white;
+        }
+
+        input:focus {
+            outline: none;
+            border: 1px solid #6366f1;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            border: none;
+            border-radius: 8px;
+            background: #6366f1;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #4f46e5;
+        }
+
+        .footer {
+            margin-top: 15px;
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="login-container">
+    <h2>Admin Login</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <!-- Username -->
+        <input type="text" name="username" placeholder="Username" required>
+
+        <!-- Password -->
+        <input type="password" name="password" placeholder="Password" required>
+
+        <button type="submit">Login</button>
+    </form>
+
+    <div class="footer">
+        Job Portal Dashboard
+    </div>
+</div>
+
+</body>
+</html>
